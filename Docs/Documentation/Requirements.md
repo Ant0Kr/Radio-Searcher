@@ -28,8 +28,24 @@
 2. Cloudinary - облако для хранение данных, имеющее простое api.
 
 ### 2.2 Интерфейс пользователя
-   Вид интерфейса пользователя описан мокапами. При разработке ПО буду приложены все усилия для создания 
+   Вид интерфейса пользователя описан следующими мокапами. При разработке ПО буду приложены все усилия для создания 
 user-friendly интерфейса. 
+   
+   Авторизация через соц.сети:
+   
+   ![](https://github.com/Ant0Kr/Radio-Searcher/blob/master/Docs/Templates/SignIn.png)
+   
+   Общий вид сайта для неавторизованного пользователя:
+   
+   ![](https://github.com/Ant0Kr/Radio-Searcher/blob/master/Docs/Templates/SimpleUser.png)
+   
+   Авторизованный пользователь:
+   
+   ![](https://github.com/Ant0Kr/Radio-Searcher/blob/master/Docs/Templates/AutorizeUser.png)
+   
+   Страница My Favourites с избранными товарами:
+   
+   ![](https://github.com/Ant0Kr/Radio-Searcher/blob/master/Docs/Templates/Favorites.png)
 
 ### 2.3 Характеристики пользователей
    Приложение подойдет для любого пользователя. Данный сайт не имеет возрастной категории. Главное
