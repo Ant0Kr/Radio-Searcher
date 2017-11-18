@@ -10,20 +10,21 @@ namespace RadioSearcher.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            if (Session["Request"] == null)
+            {
+                return View();
+            }
+            else
+            {
+                return View();
+            }
+            
         }
 
-        public ActionResult About()
+        [HttpPost]
+        public ActionResult Index(String request)
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
+            Session["Request"] = request;
             return View();
         }
     }
