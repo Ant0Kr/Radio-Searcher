@@ -1,46 +1,122 @@
-﻿@{
+﻿@model RadioSearcher.Models.Presentation.IndexModel
+@{
     ViewBag.Title = "Search Page";
 }
-<div class="row">
-    @using (@Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "w-100", role = "form" }))
-    {
-        <form>
-            <div class="row">
-                <div class="col-xl-11 col-lg-10 col-md-10 col-sm-12">
-                    <input autofocus name="request" type="text" class="form-control" id="search" aria-describedby="search" placeholder="Search...">
-                </div>
-                <div class="col-xl-1 col-lg-2 col-md-2 col-sm-12">
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </div>
+<div>
+    <img src="/Content/img/spin.gif" class="spinner" id="spin" />
+</div>
+@using (@Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "w-100", role = "form" }))
+{
+    <form name="Form">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                @if (Session["request"] != null)
+                {
+                    <label>@Session["count"] results for '@Session["request"]'</label>
+                }
             </div>
-        </form>
-    }
-</div>
-<div class="row">
-    <div class="form-check">
-        <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" value="">
-            belchip.by
-        </label>
-    </div>
-    <div class="form-check">
-        <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" value="">
-            chip-dip.ru
-        </label>
-    </div>
-</div>
+            <div class="col-xl-11 col-lg-11 col-md-11 col-sm-12">
+                <input autofocus name="request" type="text" class="form-control" id="search" aria-describedby="search" placeholder="Search...">
+            </div>
+            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12">
+                <button type="submit" class="btn btn-primary" onclick="Spinner()">Search</button>
+            </div>
+        </div>
+        <div class="row col-12">
+            <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                    <input class="form-check-input" id="belchip" type="checkbox" value="" name="belchip">
+                    belchip.by
+                </label>
+            </div>
+            <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                    <input class="form-check-input" id="chipdip" type="checkbox" value="" name="chipdip">
+                    chip-dip.ru
+                </label>
+            </div>
+            <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                    <input class="form-check-input" id="electronics" type="checkbox" value="" name="electronics">
+                    electronics.ay
+                </label>
+            </div>
+            <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                    <input class="form-check-input" id="selectAll" type="checkbox" value="" onclick="pickAll()">
+                    select all
+                </label>
+            </div>
+        </div>
+    </form>
+}
+
 <div class="row" style="margin-top:20px">
     <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
         <label for="inputfile">
             <img src="https://avatars1.githubusercontent.com/u/17966263?s=460&v=4" alt="Photo" />
         </label>
         <input accept="image/*" type="file" id="inputfile" style="display: none" />
+        <h6>Ant0Kr</h6>
+        <button class="btn btn-success">My Favourites</button>
     </div>
-    <div class="col-xl-9 col-lg-9 col-md-6 col-sm-12">
-        @Session["Request"]
+    <div class="col-xl-9 col-lg-9 col-md-6 col-sm-12 row" id="productsData">
+        @foreach (var item in Model.Products)
+        {
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                <div>@item.Name</div>
+                <img src=@item.ImgUrl alt="Not Found" />
+            </div>
+        }
     </div>
 </div>
+
+<script>
+    function pickAll() {
+        if ($('#selectAll').is(':checked')) {
+            $('#belchip').prop('checked', true);
+            $('#chipdip').prop('checked', true);
+            $('#electronics').prop('checked', true);
+        }
+    }
+</script>
+<script type="text/javascript">
+    $(window).scroll(function () {
+        if (window.$(window).scrollTop() === window.$(document).height() - window.$(window).height()) {
+            getData();
+        }
+    });
+    function getData() {
+        $.ajax({
+            type: 'POST',
+            url: '/home/index',
+            dataType: 'json',
+            beforeSend: function () {
+                document.getElementById('spin').style = 'visibility:visible;';
+            },
+            success: function (data) {
+                for (var i = 0; i < data.Products.length; i++) {
+                    window.$('#productsData').append(`<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                                                        <div>${data.Products[i].Name} </div >
+                                                        <img src=${data.Products[i].ImgUrl} alt="Not Found"/>
+                                                      </div>`
+                    );
+                }
+                document.getElementById('spin').style = 'visibility:hidden;';
+            },
+            error: function () {
+                alert("Error while retrieving data!");
+            }
+        });
+    }
+
+    function Spinner() {
+        document.getElementById('spin').style = 'visibility:visible;';
+    }
+</script>
+
+
+
 
 
 

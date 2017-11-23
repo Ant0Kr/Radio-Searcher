@@ -9,6 +9,7 @@ namespace RadioSearcher.Tools.Parsers
 {
     interface IParser
     {
-        List<Product> Parse(string request);
+        List<Product> Parse(string request, int offset);
+        int GetCount(string request);
     }
 }
