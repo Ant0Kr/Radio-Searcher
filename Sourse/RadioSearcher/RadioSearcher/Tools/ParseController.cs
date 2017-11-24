@@ -9,29 +9,35 @@ namespace RadioSearcher.Tools
 {
     public class ParseController
     {
-        public BelChipParser BelChip = new BelChipParser();
-        public ChipDipParser ChipDip = new ChipDipParser();
-        private int _entryCounter;
+        private readonly BelChipParser _belChip = new BelChipParser();
+        private readonly RadioShopParser _radioShop = new RadioShopParser();
 
-        public int GetCount(string request, string belchip, string chipdip)
-        {
-            _entryCounter += belchip == "" ? BelChip.GetCount(request) : 0;
-            _entryCounter += chipdip == "" ? ChipDip.GetCount(request) : 0;
-            return _entryCounter;
-        }
-
-        public List<Product> Parse(string request, int offset,int belchip, int chipdip)
+        public List<Product> Parse(string request, int offset, int size, int belchip, int radioshop)
         {
             var products = new List<Product>();
             if (belchip != 0 && belchip > offset)
             {
-                products.AddRange(BelChip.Parse(request, offset));
+                products.AddRange(_belChip.Parse(request, offset, size));
             }
-            else if (chipdip != 0 && chipdip + belchip > offset)
+            else if (radioshop != 0 && radioshop + belchip > offset)
             {
-                products.AddRange(ChipDip.Parse(request, offset - belchip));
+                products.AddRange(_radioShop.Parse(request, offset - belchip, size));
+            }
+            if (belchip - offset < size && belchip > offset && radioshop != 0)
+            {
+                products.AddRange(_radioShop.Parse(request, 0, size - belchip + offset));
             }
             return products;
+        }
+
+        public int GetBelChipCount(string request)
+        {
+            return _belChip.GetCount(request);
+        }
+
+        public int GetRadioShopCount(string request)
+        {
+            return _radioShop.GetCount(request);
         }
     }
 }

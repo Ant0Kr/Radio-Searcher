@@ -13,6 +13,7 @@ namespace RadioSearcher.Controllers
     public class HomeController : Controller
     {
         private readonly ParseController _parseController = new ParseController();
+        private const int PageSize = 20;
         public ActionResult Index()
         {
             Session["offset"] = 0;
@@ -20,38 +21,48 @@ namespace RadioSearcher.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(FormCollection form, string request, string belchip, string chipdip)
+        public ActionResult Index(FormCollection form, string request, string belchip, string radioshop)
         {
-            if (Session["request"] != null || request!=null)
+            Session["offset"] = 0;
+            Session["request"] = request;
+            Session["belchipCount"] = belchip == "" ? _parseController.GetBelChipCount(request) : 0;
+            Session["radioshopCount"] = radioshop == "" ? _parseController.GetRadioShopCount(request) : 0;
+            Session["count"] = (int)Session["belchipCount"] + (int)Session["radioshopCount"];
+            List<Product> products = new List<Product>();
+            if ((int)Session["offset"] < (int)Session["count"])
             {
-                if (form.Count != 0)
-                {
-                    Session["count"] = _parseController.GetCount(request, belchip, chipdip);
-                    Session["request"] = request;
-                    Session["offset"] = 0;
-                    Session["belchipCount"] = belchip == "" ? _parseController.BelChip.GetCount(request) : 0;
-                    Session["chipdipCount"] = chipdip == "" ? _parseController.ChipDip.GetCount(request) : 0;
-                }
+                products.AddRange(GetProductRange());
+            }
+            return View(new IndexModel
+            {
+                Products = products
+            });
+
+        }
+
+        public ActionResult GetProductsJson()
+        {
+            if (Session["request"] != null)
+            {
                 List<Product> products = new List<Product>();
                 if ((int)Session["offset"] < (int)Session["count"])
                 {
-                    products.AddRange(_parseController.Parse((string)Session["request"], (int)Session["offset"],
-                        (int)Session["belchipCount"], (int)Session["chipdipCount"]));
-                    Session["offset"] = (int)Session["offset"] + 10;
-                }
-                if (form.Count != 0)
-                {
-                    return View(new IndexModel
-                    {
-                        Products = products
-                    });
+                    products.AddRange(GetProductRange());
                 }
                 return Json(new IndexModel
                 {
-                    Products = products
-                });
+                    Products = products                 
+                },JsonRequestBehavior.AllowGet);
             }
-            return Json(new IndexModel());
+            return Json(new IndexModel(), JsonRequestBehavior.AllowGet);
+        }
+
+        private List<Product> GetProductRange()
+        {
+            List<Product> products = _parseController.Parse((string)Session["request"], (int)Session["offset"], PageSize,
+                (int)Session["belchipCount"], (int)Session["radioshopCount"]); 
+            Session["offset"] = (int)Session["offset"] + PageSize;
+            return products;
         }
     }
 }

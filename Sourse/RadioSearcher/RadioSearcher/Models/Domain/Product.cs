@@ -11,7 +11,7 @@ namespace RadioSearcher.Models.Domain
         public string Name { get; set; }
         public string ImgUrl { get; set; }
         public string ProductLink { get; set; }
-        public float Cost { get; set; }
-        public bool IsAvailable { get; set; }
+        public string Cost { get; set; }
+        public string IsAvailable { get; set; }
     }
 }

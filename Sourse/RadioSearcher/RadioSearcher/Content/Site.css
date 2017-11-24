@@ -58,3 +58,7 @@ img {
     width: 100px;
     height: auto;
 }
+
+.product-img {
+    max-height: 300px;
+}

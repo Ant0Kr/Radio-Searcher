@@ -31,14 +31,8 @@
             </div>
             <div class="form-check form-check-inline">
                 <label class="form-check-label">
-                    <input class="form-check-input" id="chipdip" type="checkbox" value="" name="chipdip">
-                    chip-dip.ru
-                </label>
-            </div>
-            <div class="form-check form-check-inline">
-                <label class="form-check-label">
-                    <input class="form-check-input" id="electronics" type="checkbox" value="" name="electronics">
-                    electronics.ay
+                    <input class="form-check-input" id="radioshop" type="checkbox" value="" name="radioshop">
+                    radioshop.ru
                 </label>
             </div>
             <div class="form-check form-check-inline">
@@ -52,7 +46,7 @@
 }
 
 <div class="row" style="margin-top:20px">
-    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-12">
         <label for="inputfile">
             <img src="https://avatars1.githubusercontent.com/u/17966263?s=460&v=4" alt="Photo" />
         </label>
@@ -60,12 +54,16 @@
         <h6>Ant0Kr</h6>
         <button class="btn btn-success">My Favourites</button>
     </div>
-    <div class="col-xl-9 col-lg-9 col-md-6 col-sm-12 row" id="productsData">
+    <div class="col-xl-9 col-lg-9 col-md-8 col-sm-12 row" id="productsData">
         @foreach (var item in Model.Products)
         {
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-                <div>@item.Name</div>
-                <img src=@item.ImgUrl alt="Not Found" />
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                <h5 class="word-wrap">@item.Name</h5>
+                <a href=@item.ProductLink>
+                    <img src=@item.ImgUrl alt="Not Found" class="product-img" />
+                </a>
+                <h6>@item.Cost</h6>
+                <p>@item.IsAvailable</p>
             </div>
         }
     </div>
@@ -75,8 +73,7 @@
     function pickAll() {
         if ($('#selectAll').is(':checked')) {
             $('#belchip').prop('checked', true);
-            $('#chipdip').prop('checked', true);
-            $('#electronics').prop('checked', true);
+            $('#radioshop').prop('checked', true);
         }
     }
 </script>
@@ -88,8 +85,8 @@
     });
     function getData() {
         $.ajax({
-            type: 'POST',
-            url: '/home/index',
+            type: 'GET',
+            url: '/home/GetProductsJson',
             dataType: 'json',
             beforeSend: function () {
                 document.getElementById('spin').style = 'visibility:visible;';
@@ -97,8 +94,12 @@
             success: function (data) {
                 for (var i = 0; i < data.Products.length; i++) {
                     window.$('#productsData').append(`<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-                                                        <div>${data.Products[i].Name} </div >
-                                                        <img src=${data.Products[i].ImgUrl} alt="Not Found"/>
+                                                        <h5 class="word-wrap">${data.Products[i].Name} </h5 >
+                                                        <a href="${data.Products[i].ProductLink}">
+                                                            <img src="${data.Products[i].ImgUrl}" alt="Not Found" class="product-img"/>
+                                                        </a>
+                                                        <h6>${data.Products[i].Cost}</h6>
+                                                        <p>${data.Products[i].IsAvailable}</p>
                                                       </div>`
                     );
                 }
