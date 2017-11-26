@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using RadioSearcher.Models.Domain;
 using RadioSearcher.Models.Presentation;
 using RadioSearcher.Tools;
@@ -14,9 +17,9 @@ namespace RadioSearcher.Controllers
     {
         private readonly ParseController _parseController = new ParseController();
         private const int PageSize = 20;
+
         public ActionResult Index()
         {
-            Session["offset"] = 0;
             return View(new IndexModel());
         }
 
@@ -51,17 +54,18 @@ namespace RadioSearcher.Controllers
                 }
                 return Json(new IndexModel
                 {
-                    Products = products                 
-                },JsonRequestBehavior.AllowGet);
+                    Products = products
+                }, JsonRequestBehavior.AllowGet);
             }
             return Json(new IndexModel(), JsonRequestBehavior.AllowGet);
         }
+ 
 
         private List<Product> GetProductRange()
         {
             List<Product> products = _parseController.Parse((string)Session["request"], (int)Session["offset"], PageSize,
-                (int)Session["belchipCount"], (int)Session["radioshopCount"]); 
-            Session["offset"] = (int)Session["offset"] + PageSize;
+                (int)Session["belchipCount"], (int)Session["radioshopCount"]);
+            Session["offset"] = (int)Session["offset"] + products.Count;
             return products;
         }
     }

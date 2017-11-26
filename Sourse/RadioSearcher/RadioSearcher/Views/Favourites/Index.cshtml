@@ -1,0 +1,35 @@
+﻿@model RadioSearcher.Models.Presentation.FavouriteModel
+@{
+    ViewBag.Title = "Index";
+}
+<div class="row">
+    @foreach (var item in Model.Products)
+    {
+        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12" id=@item.Id style="position: relative">
+            <i class="fa fa-trash trash" aria-hidden="true" onclick="@("DeleteFromFavourite('"+item.Id+"')")"></i>
+            <h5 class="word-wrap">@item.Name</h5>
+            <a href=@item.ProductLink>
+                <img src=@item.ImgUrl alt="Not Found" class="product-img" />
+            </a>
+            <h6>@item.Cost</h6>
+            <p>@item.IsAvailable</p>
+        </div>
+    }
+</div>
+
+<script>
+    function DeleteFromFavourite(id) {
+        console.log(id);
+        $.ajax({
+            type: 'Post',
+            url: '/favourites/delete/'+id,
+            dataType: 'json',
+            success: function () {
+                $("#" + id).remove();
+            },
+            error: function () {
+                alert("Error while retrieving data!");
+            }
+        });
+    }
+</script>

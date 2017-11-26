@@ -62,3 +62,27 @@ img {
 .product-img {
     max-height: 300px;
 }
+
+.star {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    font-size: 25px;
+    
+}
+
+.star-yellow {
+    color: yellow;
+}
+
+.star-green {
+    color: green;
+}
+
+.trash {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    font-size: 25px;
+    color: red;
+}

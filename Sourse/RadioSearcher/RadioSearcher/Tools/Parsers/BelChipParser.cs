@@ -11,7 +11,6 @@ namespace RadioSearcher.Tools.Parsers
     {
         private const string BelchipUrl = "http://belchip.by/";
 
-
         public List<Product> Parse(string request, int offset,int size)
         {
             var products = new List<Product>();
