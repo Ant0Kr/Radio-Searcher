@@ -6,61 +6,52 @@
     <img src="/Content/img/spin.gif" class="spinner" id="spin" />
 </div>
 <div class="row">
-    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-12">
-        <label for="inputfile">
-            <img src="https://avatars1.githubusercontent.com/u/17966263?s=460&v=4" alt="Photo" id="avatarImg" />
-        </label>
-        <input accept="image/*" type="file" id="inputfile" style="display: none"/>
-        <h6>Ant0Kr</h6>
-        @Html.ActionLink("My Favourites", "Index", "Favourites", new { area = "" }, new { @class = "btn btn-success" })
+    <div class="col-12">
+        @using (@Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "w-100", role = "form" }))
+            {
+            <form name="Form">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                        @if (Session["request"] != null)
+                        {
+                            <label>@Session["count"] results for '@Session["request"]'</label>
+                        }
+                    </div>
+                    <div class="col-xl-11 col-lg-11 col-md-11 col-sm-12">
+                        <input autofocus name="request" type="text" class="form-control" id="search" aria-describedby="search" placeholder="Search...">
+                    </div>
+                    <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12">
+                        <button type="submit" class="btn btn-primary" onclick="Spinner()">Search</button>
+                    </div>
+                </div>
+                <div class="row col-12">
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" id="belchip" type="checkbox" value="" name="belchip">
+                            belchip.by
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" id="radioshop" type="checkbox" value="" name="radioshop">
+                            radioshop.ru
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" id="selectAll" type="checkbox" value="" onclick="pickAll()">
+                            select all
+                        </label>
+                    </div>
+                </div>
+            </form>
+        }
     </div>
-    <div class="col-xl-9 col-lg-9 col-md-8 col-sm-12 row">
-        <div class="col-12">
-            @using (@Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "w-100", role = "form" }))
-            {
-                <form name="Form">
-                    <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                            @if (Session["request"] != null)
-                            {
-                                <label>@Session["count"] results for '@Session["request"]'</label>
-                            }
-                        </div>
-                        <div class="col-xl-11 col-lg-11 col-md-11 col-sm-12">
-                            <input autofocus name="request" type="text" class="form-control" id="search" aria-describedby="search" placeholder="Search...">
-                        </div>
-                        <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12">
-                            <button type="submit" class="btn btn-primary" onclick="Spinner()">Search</button>
-                        </div>
-                    </div>
-                    <div class="row col-12">
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label">
-                                <input class="form-check-input" id="belchip" type="checkbox" value="" name="belchip">
-                                belchip.by
-                            </label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label">
-                                <input class="form-check-input" id="radioshop" type="checkbox" value="" name="radioshop">
-                                radioshop.ru
-                            </label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label">
-                                <input class="form-check-input" id="selectAll" type="checkbox" value="" onclick="pickAll()">
-                                select all
-                            </label>
-                        </div>
-                    </div>
-                </form>
-            }
-        </div>
-        <div class="col-12 row" id="productsData">
-            @foreach (var item in Model.Products)
-            {
-                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12"  style="position: relative;">
-                    <i id="@item.Name" class="fa fa-star star star-yellow" aria-hidden="true" onclick="@("AddInFavourite('"+item.Name+"','"+item.ProductLink+"','"+item.ImgUrl+"','"+item.Cost+"','"+item.IsAvailable+"')")"></i>
+    <div class="col-12 row" id="productsData">
+        @foreach (var item in Model.Products)
+        {
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12" style="padding: 10px;">
+                <div class="product-style">
                     <h5 class="word-wrap">@item.Name</h5>
                     <a href=@item.ProductLink>
                         <img src=@item.ImgUrl alt="Not Found" class="product-img" />
@@ -68,14 +59,10 @@
                     <h6>@item.Cost</h6>
                     <p>@item.IsAvailable</p>
                 </div>
-            }
-        </div>
+            </div>
+        }
     </div>
 </div>
-
-<script>
-
-</script>
 <script type="text/javascript">
     function pickAll() {
         if ($('#selectAll').is(':checked')) {
@@ -100,19 +87,15 @@
             },
             success: function (data) {
                 for (var i = 0; i < data.Products.length; i++) {
-                    window.$('#productsData').append(`<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-                                                        <i id="${data.Products[i].Name}"
-                                                        class="fa fa-star star star-yellow" aria-hidden="true"
-                                                        onclick="AddInFavourite('${data.Products[i].Name}',
-                                                        '${data.Products[i].ProductLink}','${data.Products[i].ImgUrl}',
-                                                        '${data.Products[i].Cost}','${data.Products[i].IsAvailable}')">
-                                                        </i>
-                                                        <h5 class="word-wrap">${data.Products[i].Name} </h5 >
-                                                        <a href="${data.Products[i].ProductLink}">
-                                                            <img src="${data.Products[i].ImgUrl}" alt="Not Found" class="product-img"/>
-                                                        </a>
-                                                        <h6>${data.Products[i].Cost}</h6>
-                                                        <p>${data.Products[i].IsAvailable}</p>
+                    window.$('#productsData').append(`<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12" style="padding: 10px;">
+                                                        <div class="product-style">
+                                                            <h5 class="word-wrap">${data.Products[i].Name} </h5 >
+                                                            <a href="${data.Products[i].ProductLink}">
+                                                                <img src="${data.Products[i].ImgUrl}" alt="Not Found" class="product-img"/>
+                                                            </a>
+                                                            <h6>${data.Products[i].Cost}</h6>
+                                                            <p>${data.Products[i].IsAvailable}</p>
+                                                        </div>
                                                       </div>`
                     );
                 }
@@ -127,29 +110,6 @@
     function Spinner() {
         document.getElementById('spin').style = 'visibility:visible;';
     }
-
-    function AddInFavourite(name, productLink, imgUrl, cost, isAvailable) {  
-        $.ajax({
-            type: 'POST',
-            url: '/favourites/post/',
-            data: { name, productLink, imgUrl, cost, isAvailable },
-            dataType: 'json',
-            success: function () {
-                console.log(document.getElementById(name));
-                document.getElementById(name).classList.remove("star-yellow");
-                document.getElementById(name).classList.add("star-green");
-                alert(name + " was added in my favourites!");
-            },
-            error: function () {
-                alert("Error while retrieving data!");
-            }
-        });
-    }
-
-    $('#inputfile').change(function (event) {
-        var avatarImg = URL.createObjectURL(event.target.files[0]);
-        $("#avatarImg").attr('src', avatarImg);
-    });
 </script>
 
 

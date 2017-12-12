@@ -19,7 +19,7 @@ namespace RadioSearcher.Tools.Parsers
             for (var i = offset; i < page.Count && i < offset + size; i++)
             {
                 var imgUrl = page[i].SelectSingleNode(".//a//span//img");
-                var img = imgUrl == null ? "https://avatars1.githubusercontent.com/u/17966263?s=460&v=4" : imgUrl.Attributes["src"].Value;
+                var img = imgUrl == null ? "https://mosaikweb.com/wp-content/plugins/lightbox/images/No-image-found.jpg" : imgUrl.Attributes["src"].Value;
                 products.Add(new Product
                 {
                     Name = page[i].SelectSingleNode(".//a").InnerText,

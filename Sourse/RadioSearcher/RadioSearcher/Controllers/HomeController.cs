@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
 using RadioSearcher.Models.Domain;
 using RadioSearcher.Models.Presentation;
 using RadioSearcher.Tools;
-using RadioSearcher.Tools.Parsers;
 
 namespace RadioSearcher.Controllers
 {
@@ -31,7 +24,7 @@ namespace RadioSearcher.Controllers
             Session["belchipCount"] = belchip == "" ? _parseController.GetBelChipCount(request) : 0;
             Session["radioshopCount"] = radioshop == "" ? _parseController.GetRadioShopCount(request) : 0;
             Session["count"] = (int)Session["belchipCount"] + (int)Session["radioshopCount"];
-            List<Product> products = new List<Product>();
+            var products = new List<Product>();
             if ((int)Session["offset"] < (int)Session["count"])
             {
                 products.AddRange(GetProductRange());

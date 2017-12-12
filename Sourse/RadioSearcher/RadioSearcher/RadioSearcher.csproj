@@ -159,22 +159,13 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\FavouritesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201711251649461_init.cs" />
-    <Compile Include="Migrations\201711251649461_init.Designer.cs">
-      <DependentUpon>201711251649461_init.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="ApplicationDbContext.cs" />
     <Compile Include="Models\Domain\Product.cs" />
-    <Compile Include="Models\Presentation\FavouriteModel.cs" />
     <Compile Include="Models\Presentation\IndexModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\ProductRepository.cs" />
     <Compile Include="Tools\ParseController.cs" />
     <Compile Include="Tools\Parsers\BelChipParser.cs" />
     <Compile Include="Tools\Parsers\RadioShopParser.cs" />
@@ -214,12 +205,6 @@
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
     <None Include="packages.config" />
-    <Content Include="Views\Favourites\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201711251649461_init.resx">
-      <DependentUpon>201711251649461_init.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

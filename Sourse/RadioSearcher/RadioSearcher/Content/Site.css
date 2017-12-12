@@ -11,6 +11,7 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 120px;
+    background-color: #f3f3f3bf;
 }
 
 .footer {
@@ -63,26 +64,12 @@ img {
     max-height: 300px;
 }
 
-.star {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    font-size: 25px;
-    
+.product-style {
+    background-color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 2px;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+    transition: box-shadow 200ms cubic-bezier(0.4,0.0,0.2,1);
 }
 
-.star-yellow {
-    color: yellow;
-}
-
-.star-green {
-    color: green;
-}
-
-.trash {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    font-size: 25px;
-    color: red;
-}
