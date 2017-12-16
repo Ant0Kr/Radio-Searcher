@@ -8,11 +8,11 @@
 <div class="row">
     <div class="col-12">
         @using (@Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "w-100", role = "form" }))
-            {
+        {
             <form name="Form">
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                        @if (Session["request"] != null)
+                        @if (Session["request"] != null && Session["badConnection"] == null)
                         {
                             <label>@Session["count"] results for '@Session["request"]'</label>
                         }
@@ -47,6 +47,9 @@
             </form>
         }
     </div>
+    <div class="col-12 text-center">
+        <span class="text-danger">@Session["badConnection"]</span>
+    </div> 
     <div class="col-12 row" id="productsData">
         @foreach (var item in Model.Products)
         {

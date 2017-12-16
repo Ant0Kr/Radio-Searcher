@@ -10,6 +10,7 @@ namespace RadioSearcher.Controllers
     {
         private readonly ParseController _parseController = new ParseController();
         private const int PageSize = 20;
+        private const string ConnectionError = "Bad internet Connection!";
 
         public ActionResult Index()
         {
@@ -23,6 +24,12 @@ namespace RadioSearcher.Controllers
             Session["request"] = request;
             Session["belchipCount"] = belchip == "" ? _parseController.GetBelChipCount(request) : 0;
             Session["radioshopCount"] = radioshop == "" ? _parseController.GetRadioShopCount(request) : 0;
+            var isBadConnection = (int) Session["belchipCount"] == -1 || (int) Session["radioshopCount"] == -1;
+            Session["badConnection"] = isBadConnection ? ConnectionError : null;
+            if (isBadConnection)
+            {
+                return Index();
+            }
             Session["count"] = (int)Session["belchipCount"] + (int)Session["radioshopCount"];
             var products = new List<Product>();
             if ((int)Session["offset"] < (int)Session["count"])
@@ -33,7 +40,6 @@ namespace RadioSearcher.Controllers
             {
                 Products = products
             });
-
         }
 
         public ActionResult GetProductsJson()
@@ -52,7 +58,7 @@ namespace RadioSearcher.Controllers
             }
             return Json(new IndexModel(), JsonRequestBehavior.AllowGet);
         }
- 
+
 
         private List<Product> GetProductRange()
         {

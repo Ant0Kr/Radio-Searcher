@@ -11,7 +11,7 @@ namespace RadioSearcher.Tools.Parsers
     {
         private const string BelchipUrl = "http://belchip.by/";
 
-        public List<Product> Parse(string request, int offset,int size)
+        public List<Product> Parse(string request, int offset, int size)
         {
             var products = new List<Product>();
             var page = new HtmlWeb().Load($"{BelchipUrl}search/?query={request}").DocumentNode.SelectNodes("//div[@class='cat-item']");
@@ -22,7 +22,7 @@ namespace RadioSearcher.Tools.Parsers
                 products.Add(new Product
                 {
                     Name = page[i].SelectSingleNode(".//h3//a").InnerText,
-                    ImgUrl = string.Format(BelchipUrl + page[i].SelectSingleNode(".//div[@class='cat-pic']//a[@class='product-image']//img").Attributes["src"].Value).Replace(" ","%20"),
+                    ImgUrl = string.Format(BelchipUrl + page[i].SelectSingleNode(".//div[@class='cat-pic']//a[@class='product-image']//img").Attributes["src"].Value).Replace(" ", "%20"),
                     ProductLink = string.Format(BelchipUrl + page[i].SelectSingleNode(".//div[@class='cat-pic']//a[@class='product-image']").Attributes["href"].Value),
                     Cost = cost,
                     IsAvailable = costText != null ? "Available" : "Not available"
@@ -33,7 +33,16 @@ namespace RadioSearcher.Tools.Parsers
 
         public int GetCount(string request)
         {
-            var page = new HtmlWeb().Load($"{BelchipUrl}search/?query={request}").DocumentNode.SelectNodes("//div[@class='cat-item']");
+            HtmlNodeCollection page;
+            try
+            {
+                page = new HtmlWeb().Load($"{BelchipUrl}search/?query={request}").DocumentNode
+                    .SelectNodes("//div[@class='cat-item']");
+            }
+            catch (System.Net.WebException)
+            {
+                return -1;
+            }
             return page?.Count ?? 0;
         }
     }

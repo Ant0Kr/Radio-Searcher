@@ -34,8 +34,16 @@ namespace RadioSearcher.Tools.Parsers
 
         public int GetCount(string request)
         {
-            var page = new HtmlWeb().Load($"{RadioshopUrl}search.php?searchid=2193926&text={request}&web=0").DocumentNode
-                .SelectNodes("//div[@style='text-indent:6px;']");
+            HtmlNodeCollection page;
+            try
+            {
+                page = new HtmlWeb().Load($"{RadioshopUrl}search.php?searchid=2193926&text={request}&web=0").DocumentNode
+                    .SelectNodes("//div[@style='text-indent:6px;']");
+            }
+            catch (System.Net.WebException)
+            {
+                return -1;
+            }
             return page?.Count ?? 0;
         }
     }
